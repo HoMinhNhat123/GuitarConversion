@@ -1,0 +1,28 @@
+# Frontend dependencies and builds
+**/node_modules/
+frontend/dist/
+
+# Environment variables
+**/.env
+**/.env.local
+**/.env.*.local
+
+# ASP.NET Core builds
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# JetBrains IDEs
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
