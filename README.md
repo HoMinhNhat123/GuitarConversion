@@ -13,5 +13,17 @@ A full-stack application using:
 ```text
 frontend/  React TypeScript application
 backend/   ASP.NET Core API
+```
 
-for now there's no way to run both backend and frontend with 1 terminal =D
+## Development
+
+| Service  | URL                     |
+|----------|--------------------------|
+| Frontend | http://localhost:5173   |
+| Backend  | http://localhost:8000   |
+
+Run both together:
+
+```bash
+npm run dev
+```

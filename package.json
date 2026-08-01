@@ -1,0 +1,25 @@
+{
+  "name": "guitarconversion",
+  "version": "1.0.0",
+  "description": "A full-stack application using:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -n frontend,backend -c blue,green \"npm --prefix frontend run dev\" \"dotnet run --project backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HoMinhNhat123/GuitarConversion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/HoMinhNhat123/GuitarConversion/issues"
+  },
+  "homepage": "https://github.com/HoMinhNhat123/GuitarConversion#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.4"
+  }
+}

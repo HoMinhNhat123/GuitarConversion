@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 async function intialCommitCall(){
-  const res = await fetch('http://localhost:5000/api/initialCommit');
+  const res = await fetch('/api/initialCommit');
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || err.hint || `HTTP ${res.status}`);
