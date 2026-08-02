@@ -1,3 +1,4 @@
+using guitarConversionNamespace.Api;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -17,4 +18,7 @@ app.MapGet("/api/initialCommit", () =>
     });
 });
 
+app.newItemEndpoint();
+
 app.Run();
+
