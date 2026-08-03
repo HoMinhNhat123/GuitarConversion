@@ -18,7 +18,7 @@ app.MapGet("/api/initialCommit", () =>
     });
 });
 
-app.newItemEndpoint();
+app.MapProjectEndpoints();
 
 app.Run();
 

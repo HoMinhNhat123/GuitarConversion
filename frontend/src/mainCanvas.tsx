@@ -1,29 +1,52 @@
 import './mainCanvas.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-type Item = {
-  itemId: string //uuid v4
+type ProjectType = {
+  projectId: string //uuid v4
   name: string
 }
 
+/**
+ * @param ApiEndpoint
+ * @returns json result   
+ */
+const runApi = async (endpoint: string, method: string) => {
+  const apiRes = await fetch(endpoint, { method: method });
+
+  if (!apiRes.ok) {
+    const err = await apiRes.json().catch(() => ({}));
+    throw new Error(err.error || err.hint || `HTTP ${apiRes.status}`);
+  }
+
+  const out = await apiRes.json();
+  return out
+}
+
+
 export function MainCanvas() {
-  const [items, setItems] = useState<Item[]>([]);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
+
+  // get all the projects under .GuitarConversion/
+  // run when the UI is first loaded
+  useEffect(() => {
+    const runGetApi = async () => {
+
+      // out will be an array of ProjectType
+      const out = await runApi("/api/getProjects", "GET");
+      setProjects(out)
+
+    };
+
+    runGetApi();
+  }, [])
 
   /**
-   * Call newItem api 
-   * create new projects in /.guitarConversion (with a valid uuid)
+   * Call newProject POST api 
+   * create a new project in /.GuitarConversion (with a valid uuid)
    */
-  const onNewItem = async () => {
-    const apiRes = await fetch("/api/newItem", {method: 'POST'});
-
-    if (!apiRes.ok) {
-      const err = await apiRes.json().catch(() => ({}));
-      throw new Error(err.error || err.hint || `HTTP ${apiRes.status}`);
-    }
-
-    const out = await apiRes.json();
-    setItems([...items, {itemId: out.itemId, name: "default project"}])
-    
+  const onNewProject = async () => {
+    const out = await runApi("/api/newProject", "POST");
+    setProjects([...projects, { projectId: out.projectId, name: "default project" }])
   }
 
   // ---- UI ----
@@ -37,19 +60,19 @@ export function MainCanvas() {
         <div>
           <button
             type="button"
-            onClick = { onNewItem }
+            onClick={onNewProject}
           >
-            New Item 
+            New Project
           </button>
         </div>
-        
-      <div className="itemRow">
-        {items.map((item) => (
-          <div key={item.itemId} className="itemBox">
-            {item.name}
-          </div>
-        ))}
-      </div>
+
+        <div className="projectRow">
+          {projects.map((project) => (
+            <div key={project.projectId} className="projectBox">
+              {project.name}
+            </div>
+          ))}
+        </div>
       </main>
     </>
   )

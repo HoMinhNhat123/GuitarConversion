@@ -31,14 +31,14 @@
   font-weight: 400;
 }
 
-.itemRow {
+.projectRow {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.itemBox {
+.projectBox {
   width: 160px;
   min-height: 80px;
   padding: 0.75rem;
