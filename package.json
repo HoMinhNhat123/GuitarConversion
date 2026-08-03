@@ -21,5 +21,8 @@
   "homepage": "https://github.com/HoMinhNhat123/GuitarConversion#readme",
   "devDependencies": {
     "concurrently": "^10.0.4"
+  },
+  "dependencies": {
+    "react-router-dom": "^7.18.2"
   }
 }

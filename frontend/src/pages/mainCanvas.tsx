@@ -1,10 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import './mainCanvas.css'
 import { useEffect, useState } from 'react'
+import { type ProjectType } from '../type'
 
-type ProjectType = {
-  projectId: string //uuid v4
-  name: string
-}
+
 
 /**
  * @param ApiEndpoint
@@ -25,12 +24,12 @@ const runApi = async (endpoint: string, method: string) => {
 
 export function MainCanvas() {
   const [projects, setProjects] = useState<ProjectType[]>([]);
+  const navigate = useNavigate();
 
   // get all the projects under .GuitarConversion/
   // run when the UI is first loaded
   useEffect(() => {
     const runGetApi = async () => {
-
       // out will be an array of ProjectType
       const out = await runApi("/api/getProjects", "GET");
       setProjects(out)
@@ -47,6 +46,7 @@ export function MainCanvas() {
   const onNewProject = async () => {
     const out = await runApi("/api/newProject", "POST");
     setProjects([...projects, { projectId: out.projectId, name: "default project" }])
+    console.log(projects);
   }
 
   // ---- UI ----
@@ -68,7 +68,11 @@ export function MainCanvas() {
 
         <div className="projectRow">
           {projects.map((project) => (
-            <div key={project.projectId} className="projectBox">
+            <div
+              key={project.projectId}
+              className="projectBox"
+              onClick = {() => navigate(`/project/${project.projectId}`)}
+            >
               {project.name}
             </div>
           ))}
