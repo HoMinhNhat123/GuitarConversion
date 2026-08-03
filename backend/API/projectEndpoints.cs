@@ -69,5 +69,23 @@ public static class ProjectEndpoints
       }
       return Results.Ok(projects);
     });
+
+    /*
+      Upon calling, returns the package.json of the project by its id
+     */
+    app.MapGet("/api/getProject/{projectId}", async (string? projectId) =>
+    {
+      if (projectId == null)
+      {
+        return Results.BadRequest("no specific projectId");
+      }
+
+      string jsonFilePath = Path.Combine(baseFolderPath, projectId, "package.json");
+      if (!File.Exists(jsonFilePath)) { return Results.NotFound(); }
+
+      string json = await File.ReadAllTextAsync(jsonFilePath);
+      Project? myProject = JsonSerializer.Deserialize<Project>(json);
+      return Results.Ok(myProject);
+    });
   }
 }

@@ -1,25 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import './mainCanvas.css'
 import { useEffect, useState } from 'react'
-import { type ProjectType } from '../type'
-
-
-
-/**
- * @param ApiEndpoint
- * @returns json result   
- */
-const runApi = async (endpoint: string, method: string) => {
-  const apiRes = await fetch(endpoint, { method: method });
-
-  if (!apiRes.ok) {
-    const err = await apiRes.json().catch(() => ({}));
-    throw new Error(err.error || err.hint || `HTTP ${apiRes.status}`);
-  }
-
-  const out = await apiRes.json();
-  return out
-}
+import { type ProjectType } from '../projectType'
+import { runApi } from '../helper'
 
 
 export function MainCanvas() {
