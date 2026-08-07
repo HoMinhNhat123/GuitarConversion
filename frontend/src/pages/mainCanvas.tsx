@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import './mainCanvas.css'
 import { useEffect, useState } from 'react'
 import { type ProjectType } from '../projectType'
-import { runApi } from '../helper'
+import { runBasicApi } from '../helper'
 
 
 export function MainCanvas() {
@@ -12,14 +12,14 @@ export function MainCanvas() {
   // get all the projects under .GuitarConversion/
   // run when the UI is first loaded
   useEffect(() => {
-    const runGetApi = async () => {
+    const runEffect = async () => {
       // out will be an array of ProjectType
-      const out = await runApi("/api/getProjects", "GET");
+      const out = await runBasicApi("/api/getProjects", "GET");
       setProjects(out)
 
     };
 
-    runGetApi();
+    runEffect();
   }, [])
 
   /**
@@ -27,7 +27,7 @@ export function MainCanvas() {
    * create a new project in /.GuitarConversion (with a valid uuid)
    */
   const onNewProject = async () => {
-    const out = await runApi("/api/newProject", "POST");
+    const out = await runBasicApi("/api/newProject", "POST");
     setProjects([...projects, { projectId: out.projectId, name: "default project" }])
     console.log(projects);
   }

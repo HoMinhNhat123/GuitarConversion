@@ -43,7 +43,6 @@ public static class ProjectEndpoints
       });
     });
 
-
     /*
       Upon calling, returns a list
       of project's names, and ids

@@ -1,8 +1,9 @@
 /**
  * @param ApiEndpoint
+ * Doesn't need any specific request body 
  * @returns json result   
  */
-export const runApi = async (endpoint: string, method: string) => {
+export const runBasicApi = async (endpoint: string, method: string) => {
   const apiRes = await fetch(endpoint, { method: method });
 
   if (!apiRes.ok) {
