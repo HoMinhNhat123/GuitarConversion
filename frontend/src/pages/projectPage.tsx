@@ -4,24 +4,13 @@ import { useParams } from "react-router-dom"
 import { runBasicApi } from "../helper";
 import { type ProjectType } from '../projectType'
 
-
-//blobl typescript component
-function PdfViewer({ projectId, pdfId }: { projectId: string; pdfId: string }) {
-  return (
-    <iframe
-      src={`/api/${projectId}/${pdfId}`}
-      title="PDF viewer"
-      style={{ width: "100%", height: "80vh", border: "none" }}
-    />
-  );
-}
-
 export function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const [project, setProject] = useState<ProjectType>(); 
   const [pdfId, setPdfId] = useState<string | null>(null);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  /*
+  /*  
    Run get API -> return package,json under .GuitarConversion/{projectId}
    */
   useEffect(() => {
@@ -31,6 +20,29 @@ export function ProjectPage() {
     }
     runEffect();
   }, [])
+
+  /*
+    Run /api/{projectId}/{pdfId} which returns a pdf file
+    ingest pdf file onto UI
+   */
+  useEffect(() => {
+    if (!pdfId) return;
+
+    // calling API 
+    let objectUrl: string;
+    const runEffect = async () => {
+      const apiRes = await fetch(`/api/${projectId}/${pdfId}`);
+      const blob = await apiRes.blob();
+      objectUrl = URL.createObjectURL(blob);
+      setPdfUrl(objectUrl);
+    }
+    runEffect();
+
+    // cleanup url to avoid memory leak 
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    }
+  },[pdfId]);
   
   /*
     input event handler
@@ -72,10 +84,10 @@ export function ProjectPage() {
         />
       </div>
       
-      {/* pdf viewer*/}
-      {(pdfId && projectId) ? (
-        <PdfViewer projectId={ projectId } pdfId = { pdfId} />
-      ) : null}
+      {/* pdf viewer */}
+      {pdfUrl ? (
+        <iframe src={ pdfUrl }  style={{ width: "100%", height: "80vh", border: "none" }}/>
+      ): <div>No pdf here sad</div>}
       
     </>
   )
