@@ -8,12 +8,13 @@ public static class fileHandler
   Path.Combine(Directory.GetCurrentDirectory(),
     "..",
     ".GuitarConversion"));
-  /*
-  Create a new pdf file under .GuitarConversion/{projectId}
-  Return opaque ID that let the frontend store it under UI 
-  */
   public static void MapFileEndpoints(this WebApplication app)
   {
+
+    /*
+    Create a new pdf file under .GuitarConversion/{projectId}
+    Return opaque ID that let the frontend store it under UI 
+    */
     app.MapPost("/api/{projectId}/newPdf", async (string projectId, IFormFile? file) =>
     {
 
@@ -28,7 +29,9 @@ public static class fileHandler
       }
 
       var fileId = Guid.NewGuid().ToString(); fileId += ".pdf";
-      var storagePath = Path.Combine(baseFolderPath, projectId, fileId);
+      var storageDir = Path.Combine(baseFolderPath, projectId, "pdf_files");
+      Directory.CreateDirectory(storageDir);
+      var storagePath = Path.Combine(storageDir, fileId);
 
       await using (var stream = File.Create(storagePath))
       {
@@ -41,5 +44,20 @@ public static class fileHandler
       });
     })
     .DisableAntiforgery();
+
+    /*
+    Return the pdf with projectId and pdfId
+     */
+    app.MapGet("/api/{projectId}/{pdfId}", async (string projectId, string pdfId) =>
+    {
+      //guard agaisnt path traversal
+      if (pdfId.Contains("..") || projectId.Contains("..")) return Results.BadRequest("Invalid path");
+
+      var storagePath = Path.Combine(baseFolderPath, projectId, "pdf_files", pdfId);
+      if (!File.Exists(storagePath)) return Results.Ok(new {notFound = "not found"});
+
+      var stream = File.OpenRead(storagePath);
+      return Results.File(stream, contentType: "application/pdf");
+    });
   }
 }
