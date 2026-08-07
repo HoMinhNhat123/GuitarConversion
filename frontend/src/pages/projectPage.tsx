@@ -71,25 +71,41 @@ export function ProjectPage() {
     }
   }
 
-  const contentComponent = (
-    <>
-      <div>Hello world {project?.name}, {project?.projectId} </div>
-    
-      <div> Music sheet </div>
-      <div>
-        <input
-          type="file"
-          accept=".pdf"
-          onChange={(e) => { onFile(e.target.files?.[0] ?? null)}}
-        />
-      </div>
-      
-      {/* pdf viewer */}
-      {pdfUrl ? (
-        <iframe src={ pdfUrl }  style={{ width: "100%", height: "80vh", border: "none" }}/>
-      ): <div>No pdf here sad</div>}
-      
-    </>
-  )
+const contentComponent = (
+  <>
+    <header className="topBar">
+      <p>Guitar Conversion</p>
+    </header>
+
+    <main className="projectPage">
+      <h1>{project?.name ?? "Loading..."}</h1>
+      <p className="projectMeta">projectId = {project?.projectId}</p>
+
+      <section className="sheetSection">
+        <h2>Music sheet</h2>
+
+        <label className="uploadLabel">
+          Upload PDF
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+
+        {pdfUrl ? (
+          <iframe
+            className="pdfFrame"
+            src={pdfUrl}
+            title="PDF viewer"
+          />
+        ) : (
+          <div className="emptyPdf">No PDF yet — upload one above</div>
+        )}
+      </section>
+    </main>
+  </>
+)
+  
   return contentComponent
 }
